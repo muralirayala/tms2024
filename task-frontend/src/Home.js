@@ -14,9 +14,11 @@ const Home = () => {
                 Don't you have an account? <Link to="/signup">Signup</Link>
             </p>
             <p>
-
                 Create Task <Link to='/tasks'>Create New Task</Link>
-            </p>          
+            </p> 
+            <p>
+                Tasks List <Link to='/tasks-list'>Tasks List</Link>
+            </p>                   
         </div>
     );
 };

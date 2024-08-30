@@ -7,7 +7,8 @@ import Home from './Home';
 import Signup from './Signup';
 import Users from './Users';
 import TaskForm from './components/TaskForm';
-import CreateTask from './components/CreateTask';
+import TasksList from './components/TaskList';
+
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/users' element={<Users />} />
           <Route path='/tasks' element={<TaskForm />} />
-          <Route path='/create-task' element={<CreateTask />} />
+          <Route path='/tasks-list' element={<TasksList />} />
         </Routes>
       </div>
     </Router>

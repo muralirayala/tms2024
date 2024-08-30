@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './TaskForm.css';
+import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
+
 
 const TaskForm = ({ onSubmit, task }) => {
     const [title, setTitle] = useState(task ? task.title : '');
@@ -9,6 +12,7 @@ const TaskForm = ({ onSubmit, task }) => {
     const [dueDate, setDueDate] = useState(task ? task.dueDate : '');
     const [priority, setPriority] = useState(task ? task.priority : ''); // Default to an empty string
     const [tags, setTags] = useState(task ? task.tags.join(', ') : '');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,9 +29,11 @@ const TaskForm = ({ onSubmit, task }) => {
             if (task) {
                 const response = await axios.put(`http://localhost:3000/api/tasks/${task.id}`, taskData);
                 console.log('Task updated:', response.data);
+
             } else {
                 const response = await axios.post('http://localhost:3000/api/tasks', taskData);
-                console.log('Task created:', response.data);
+                console.log('Task created Succesfully', response.data);
+                navigate('/tasks-list');
             }
             if (typeof onSubmit === 'function') {
                 onSubmit();
@@ -41,6 +47,10 @@ const TaskForm = ({ onSubmit, task }) => {
     };
 
     return (
+        <div>
+            <h1>Task Form</h1>
+            <p><Link to='/tasks-list'>Tasks List</Link></p>
+            <p><Link to="/">Home</Link></p>            
         <form onSubmit={handleSubmit}>
             <div>
                 <label>Title:</label>
@@ -78,6 +88,7 @@ const TaskForm = ({ onSubmit, task }) => {
             </div>
             <button type='submit'>Save</button>
         </form>
+        </div>
     );
 };
 
