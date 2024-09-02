@@ -31,6 +31,8 @@ const Signup = () => {
         console.log(data);
     };
     return (
+        <div>
+        <h1>Signup Page</h1>
         <form onSubmit={handleSubmit} >
             <div>
                 <label>Username: </label>
@@ -53,6 +55,7 @@ const Signup = () => {
                 Already have an account? <Link to="/login">Login</Link>
             </p>
         </form>
+        </div>
     );
 };
 

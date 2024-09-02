@@ -38,6 +38,8 @@ const Login = () => {
         }
     };
     return (
+        <div>
+            <h1>Login Page</h1>
         <form onSubmit={(handleSubmit)} >
             <div>
                 <label>Email:</label>
@@ -56,6 +58,7 @@ const Login = () => {
                 Go back to <Link to="/">Home</Link>
             </p>
         </form>
+        </div>
     );
 
 
