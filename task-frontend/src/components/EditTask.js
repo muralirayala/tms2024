@@ -7,7 +7,6 @@ const EditTask = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const task = location.state;
-    console.log(task);
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -19,26 +18,22 @@ const EditTask = () => {
 
     useEffect(() => {
         if (task)  {
-            // const updatetask = task.task;
-            setFormData(task.task);
-            // const formattedTask = {
-            //     ...updatetask,
-            //     dueDate: task.dueDate ? new Date(updatetask.dueDate).toISOString().split('T')[0] : ""
-            // };
-            // setFormData(formattedTask);
+            const formattedTask = {
+                ...task.task,
+                dueDate: task.task.dueDate ? new Date(task.task.dueDate).toISOString().split('T')[0] : "" // Format dueDate
+            };
+            setFormData(formattedTask);
         }
     }, [task]);
-
     const handleInputChange = (e) => {
         const {name, value} = e.target;
         setFormData({ ...formData, [name]: value});
     };
-    console.log("form data", formData);
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         try {
             await axios.put(`http://localhost:3000/api/tasks/${formData._id}`, formData);
-            navigate("/tasks");
+            navigate("/tasks-list");
         }
         catch(err) {
             console.log('Error in udpating the task', err);

@@ -19,8 +19,19 @@ router.post('/tasks', async(req, res) => {
 // Read all tasks
 router.get('/tasks', async (req, res) => {
     try {
-        const tasks = await Task.find();
-        res.status(200).json(tasks);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+        const skip = (page-1)*limit;
+
+        const tasks = await Task.find().skip(skip).limit(limit);
+        const totalTasks = await Task.countDocuments();
+        const totalPages = Math.ceil(totalTasks/limit);
+        res.status(200).json({
+            tasks,
+            totalPages
+        });
+        // const tasks = await Task.find();
+        // res.status(200).json(tasks);
     }
     catch(err) {
         res.status(500).json({ error: err.message });
