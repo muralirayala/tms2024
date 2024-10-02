@@ -1,0 +1,28 @@
+http:
+  port: 3000
+apiEndpoints:
+  users:
+    path: /api/users/*
+  tasks:
+    path: /api/tasks/*
+  subtasks:
+    path: /api/subtasks/*
+serviceEndpoints:
+  user-service:
+    url: http://localhost:3001
+  task-service:
+    url: http://localhost:3002
+  subtask-service:
+    url: http://localhost:3003
+policies:
+  - proxy
+pipelines:
+  default:
+    apiEndpoints:
+      - users
+      - tasks
+      - subtasks
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: "{{apiEndpoint}}-service"
