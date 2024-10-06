@@ -1,20 +1,36 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "./../assets/styles/SearchComponent.css";
+import { useParams } from "react-router-dom"; // Import useParams
 
 const SearchComponent = ({ entity, onSearchResults }) => {
     const [title, setTitle] = useState("");
+    const { taskId } = useParams();
+    console.log('taskId', taskId);
 
     const handleSearch = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.get(`http://localhost:3004/api/search/${entity}`, {
-                params: {
-                    title,
-                }
-            });
-            // Pass results to parent component (Dashboard) through the prop
-            onSearchResults(response.data);
+            if (entity === 'subtasks') {
+                const response = await axios.get(`http://localhost:3004/api/search/${entity}`, {
+                    params: {
+                        title,
+                        taskId,
+                    }
+                });
+                // Pass results to parent component (Dashboard) through the prop
+                onSearchResults(response.data);                
+            }
+            else {
+                const response = await axios.get(`http://localhost:3004/api/search/${entity}`, {
+                    params: {
+                        title,
+                    }
+                });
+                // Pass results to parent component (Dashboard) through the prop
+                onSearchResults(response.data);                
+            }
+
         }
         catch (err) {
             console.log("Search Failed:", err);

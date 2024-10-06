@@ -29,7 +29,7 @@ const searchTasks = async (req, res) => {
 // Search subtasks based on the query parameters (title, status)
 const searchSubTasks = async(req, res) => {
     try {
-        const {title, status} = req.query;
+        const {title, status, taskId} = req.query;
         const query = {};
         if (title) {
             query.title = {$regex: title, $options: 'i'};
@@ -37,6 +37,9 @@ const searchSubTasks = async(req, res) => {
         if (status) {
             query.status = status;
         }
+        if (taskId) {
+            query.taskId = taskId;
+        }        
         const subtasks = await SubTask.find(query);
         res.status(200).json(subtasks);
     }

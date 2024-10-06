@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import { fetchToken } from "../components/Auth/auth";
+import SearchComponent from './SearchComponent';
 import '../assets/styles/subtasksList.css';
 
 console.log('Subtaskslist page is requested..');
@@ -55,10 +56,17 @@ const SubTasksList = () => {
         fetchSubTasks();
     }, [taskId]);
 
+    // Handle search results and override tasks
+    const handleSearchResults = (results) => {
+        const validTasks = results.filter(task => task._id && task.title); // Ensure valid tasks
+        setSubtasks(validTasks); // Override tasks with search results
+    };
     return (
         <div className="subtasks-list-container">
         <p><Link to="/dashboard" className="home-link-button">Dashboard</Link></p>
         <p><Link to="/subtask" className="home-link-button">Create Sub Task</Link></p>
+        {/* Pass handleSearchResults to SearchComponent to update tasks */}
+        <SearchComponent entity="subtasks" onSearchResults={handleSearchResults} />         
             <h1>Subtasks for {taskTitle}</h1>
             <div className="subtasks-table">
                 <table>
