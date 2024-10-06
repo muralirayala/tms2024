@@ -2,18 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { fetchToken } from '../components/Auth/auth';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
-import '../assets/styles/dashboard.css'; // Import CSS file for Dashboard page
+import SearchComponent from './SearchComponent';
+import '../assets/styles/dashboard.css';
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    console.log("Dashboard request recieved");
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState([]); // Manage tasks state
+
+    // Fetch all tasks on component mount
     useEffect(() => {
         const fetchTasks = async () => {
             try {
                 const token = await fetchToken();
-                console.log('token is', token);                
                 const response = await fetch('http://localhost:3003/api/tasks', {
                     headers: {
                         'x-auth-token': token,
@@ -23,8 +23,7 @@ const Dashboard = () => {
                     throw new Error('Failed to fetch tasks');
                 }
                 const data = await response.json();
-                console.log("task data", data);
-                setTasks(data);
+                setTasks(data); // Initially set all tasks
             } catch (err) {
                 console.error('Fetch tasks error', err);
             }
@@ -32,17 +31,21 @@ const Dashboard = () => {
 
         fetchTasks();
     }, []);
+
+    // Handle view sub-tasks
     const handleViewSubTasks = async(taskId) => {
         try {
             const token = await fetchToken();
-            console.log("token is", token);
-            navigate(`/subtasks/${taskId}`, {
-                state: {token}
-            });
-        }
-        catch(err) {
+            navigate(`/subtasks/${taskId}`, { state: { token } });
+        } catch(err) {
             console.log('Failed to fetch token', err);
         }
+    };
+
+    // Handle search results and override tasks
+    const handleSearchResults = (results) => {
+        const validTasks = results.filter(task => task._id && task.title); // Ensure valid tasks
+        setTasks(validTasks); // Override tasks with search results
     };
 
     return (
@@ -50,36 +53,42 @@ const Dashboard = () => {
             <h1>Dashboard</h1>
             <p><Link to="/task" className="home-link-button">Create Task</Link></p>
             <p><Link to="/subtask" className="home-link-button">Create Sub Task</Link></p>
+            
+            {/* Pass handleSearchResults to SearchComponent to update tasks */}
+            <SearchComponent entity="tasks" onSearchResults={handleSearchResults} /> 
+
             <div className="tasks-table">
                 <h2>Tasks</h2>
-                {tasks.length === 0 ? (
-                    <p>No tasks available</p>
-                ) : (
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Description</th>
-                                <th>Status</th>
-                                <th>Priority</th>
-                                <th>SubTasks</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {tasks.map((task) => (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>SubTasks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Array.isArray(tasks) && tasks.length > 0 ? (
+                            tasks.map((task) => (
                                 <tr key={task._id}>
-                                    <td>{task.title}</td>
-                                    <td>{task.description}</td>
-                                    <td>{task.status}</td>
-                                    <td>{task.priority}</td>
+                                    <td>{task.title || "Untitled"}</td>
+                                    <td>{task.description || "No description available"}</td>
+                                    <td>{task.status || "Unknown"}</td>
+                                    <td>{task.priority || "Not specified"}</td>
                                     <td>
                                         <button onClick={() => handleViewSubTasks(task._id)} className='subtasks-link'>View SubTasks</button>
                                     </td>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="5">No tasks available</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
             </div>
         </div>
     );
