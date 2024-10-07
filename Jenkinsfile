@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     // Deploying both services using Docker Compose
-                    sh 'docker-compose -f docker-compose.yml up -d --build'
+                    sh 'docker-compose -f docker-compose.yaml up -d --build'
                 }
             }
         }
