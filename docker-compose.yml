@@ -1,0 +1,34 @@
+version: '3'
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=secret
+    volumes:
+      - mongo-data:/data/db
+
+  task-backend:
+    build: ./task-backend
+    container_name: task-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URI=${MONGO_URI}  # Injecting MongoDB URI from Jenkins credentials
+      - JWT_SECRET=${JWT_SECRET}  # Injecting JWT secret from Jenkins credentials
+    depends_on:
+      - mongo
+
+  task-frontend:
+    build: ./task-frontend
+    container_name: task-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - task-backend
+
+volumes:
+  mongo-data:
