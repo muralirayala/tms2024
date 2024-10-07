@@ -3,6 +3,7 @@ import { fetchToken } from '../components/Auth/auth';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import SearchComponent from './SearchComponent';
+import TaskChart from '../components/TaskChart';
 import '../assets/styles/dashboard.css';
 
 const Dashboard = () => {
@@ -51,6 +52,7 @@ const Dashboard = () => {
     return (
         <div className="dashboard-container">
             <h1>Dashboard</h1>
+            <TaskChart />
             <p><Link to="/task" className="home-link-button">Create Task</Link></p>
             <p><Link to="/subtask" className="home-link-button">Create Sub Task</Link></p>
             
