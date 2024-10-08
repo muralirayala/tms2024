@@ -8,6 +8,15 @@ pipeline {
     }
 
     stages {
+        stage('Cleanup Workspace') {
+            steps {
+                script {
+                    echo 'Cleaning up workspace...'
+                    deleteDir() // Deletes the entire workspace to ensure a fresh start
+                }
+            }
+        }
+
         stage('Checkout') {
             steps {
                 // Check out the repository from the 'develop' branch on GitHub
@@ -37,8 +46,6 @@ pipeline {
                     sh 'docker-compose -f docker-compose.yaml up -d --build'
                 }
             }
-        }
-
         }
     }
 
