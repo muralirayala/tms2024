@@ -6,13 +6,13 @@ WORKDIR /usr/src/app
 
 # Copy the package.json and package-lock.json files to install dependencies
 COPY package*.json ./
-RUN npm install -g react-scripts
+RUN npm install -g react-scripts eslint
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application code to the container
 COPY . .
-
+RUN npm run lint
 # Build the frontend application
 RUN npm run build
 
