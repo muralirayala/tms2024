@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 # Copy the package.json and package-lock.json files to install dependencies
 COPY package*.json ./
-
+RUN npm install -g react-scripts
 # Install dependencies
 RUN npm install
 
