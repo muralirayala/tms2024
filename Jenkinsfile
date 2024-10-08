@@ -20,11 +20,11 @@ pipeline {
                 script {
                     // Build the task-frontend Docker image
                     dir('task-frontend') {
-                        sh 'docker build -t my-task-frontend .'
+                        bat 'docker build -t my-task-frontend .'
                     }
                     // Build the task-backend Docker image
                     dir('task-backend') {
-                        sh 'docker build -t my-task-backend .'
+                        bat 'docker build -t my-task-backend .'
                     }
                 }
             }
@@ -34,7 +34,7 @@ pipeline {
             steps {
                 script {
                     // Deploying both services using Docker Compose
-                    sh 'docker-compose -f docker-compose.yaml up -d --build'
+                    bat 'docker-compose -f docker-compose.yaml up -d --build'
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     // Optionally, you can run any tests for the backend
-                    sh 'docker-compose exec task-backend npm test'
+                    bat 'docker-compose exec task-backend npm test'
                 }
             }
         }
