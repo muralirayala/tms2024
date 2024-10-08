@@ -14,9 +14,12 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
+    "eslint": "^7.32.0",  // Added ESLint
+    "eslint-config-react-app": "^6.0.0"  // Added ESLint React app config
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "lint": "eslint .",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
