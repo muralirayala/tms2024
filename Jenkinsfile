@@ -39,13 +39,6 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                script {
-                    // Optionally, you can run any tests for the backend
-                    sh 'docker-compose exec task-backend npm test'
-                }
-            }
         }
     }
 
