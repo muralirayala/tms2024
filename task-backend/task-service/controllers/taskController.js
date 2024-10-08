@@ -31,6 +31,17 @@ exports.createTask = async (req, res) => {
     }
 };
 
+// Fetch tasks for internal use
+exports.getTasksInternal = async () => {
+    try {
+        const tasks = await Task.find();
+        return tasks;
+    } catch (err) {
+        console.error('Error fetching tasks:', err);
+        throw err; // Throw error to be caught by calling function
+    }
+};
+
 // Get all tasks
 exports.getTasks = async (req, res) => {
     try {
