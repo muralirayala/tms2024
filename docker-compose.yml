@@ -1,15 +1,16 @@
-version: '3'
-
 services:
   frontend:
-    build: ./taskapp-frontend
+    build:
+      context: ./taskapp-frontend  # Ensure the context is set to the correct path
     container_name: taskapp-frontend
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+      
   user-service:
-    build: ./task-backend/user-service
+    build:
+      context: ./task-backend/user-service
     container_name: user-service
     ports:
       - "3001:3001"
@@ -17,10 +18,11 @@ services:
       - NODE_ENV=production
       - PORT=3001
     depends_on:
-          - frontend  # This ensures frontend is built and up before user-service      
+      - frontend
 
   task-service:
-    build: ./task-backend/task-service
+    build:
+      context: ./task-backend/task-service
     container_name: task-service
     ports:
       - "3003:3003"
@@ -28,10 +30,11 @@ services:
       - NODE_ENV=production
       - PORT=3003
     depends_on:
-          - frontend  # This ensures frontend is built and up before user-service
+      - frontend
 
   subtask-service:
-    build: ./task-backend/subtask-service
+    build:
+      context: ./task-backend/subtask-service
     container_name: subtask-service
     ports:
       - "3002:3002"
@@ -39,10 +42,11 @@ services:
       - NODE_ENV=production
       - PORT=3002
     depends_on:
-          - frontend  # This ensures frontend is built and up before user-service
+      - frontend
 
   search-service:
-    build: ./task-backend/search-service
+    build:
+      context: ./task-backend/search-service
     container_name: search-service
     ports:
       - "3004:3004"
@@ -50,10 +54,11 @@ services:
       - NODE_ENV=production
       - PORT=3004
     depends_on:
-          - frontend  # This ensures frontend is built and up before user-service
+      - frontend
 
   task-visualization-service:
-    build: ./task-backend/task-visualization-service
+    build:
+      context: ./task-backend/task-visualization-service
     container_name: task-visualization-service
     ports:
       - "3005:3005"
@@ -61,4 +66,4 @@ services:
       - NODE_ENV=production
       - PORT=3005
     depends_on:
-          - frontend  # This ensures frontend is built and up before user-service
+      - frontend
