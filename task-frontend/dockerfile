@@ -12,6 +12,8 @@ RUN npm install
 
 # Copy the rest of the application code to the container
 COPY . .
+RUN npm cache clean --force
+RUN rm -rf node_modules package-lock.json
 
 # Build the frontend application
 RUN npm run build
