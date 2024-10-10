@@ -4,8 +4,8 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                // Assuming you're storing your project in a Git repository
-                git branch: 'main', url: 'https://github.com/muralirayala/tms2024.git'
+                // You don't need to clone here since Jenkins will do that automatically
+                echo 'Repository is cloned automatically by Jenkins SCM'
             }
         }
 
@@ -13,7 +13,7 @@ pipeline {
             steps {
                 script {
                     // Use Docker Compose to build and start all services
-                    sh 'docker-compose up --build -d'
+                    bat 'docker-compose up --build -d'
                 }
             }
         }
@@ -21,11 +21,11 @@ pipeline {
         stage('Test Services') {
             steps {
                 // Test your services by making requests to them
-                sh 'curl http://localhost:3001' // Testing user-service
-                sh 'curl http://localhost:3002' // Testing subtask-service
-                sh 'curl http://localhost:3003' // Testing task-service
-                sh 'curl http://localhost:3004' // Testing search-service
-                sh 'curl http://localhost:3005' // Testing task-visualization-service
+                bat 'curl http://localhost:3001' // Testing user-service
+                bat 'curl http://localhost:3002' // Testing subtask-service
+                bat 'curl http://localhost:3003' // Testing task-service
+                bat 'curl http://localhost:3004' // Testing search-service
+                bat 'curl http://localhost:3005' // Testing task-visualization-service
             }
         }
 
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     // Stop the services after testing
-                    sh 'docker-compose down'
+                    bat 'docker-compose down'
                 }
             }
         }
