@@ -1,8 +1,8 @@
 services:
   frontend:
     build:
-      context: ./taskapp-frontend  # Ensure the context is set to the correct path
-    container_name: taskapp-frontend
+      context: ./task-frontend  # Ensure the context is set to the correct path
+    container_name: task-frontend
     ports:
       - "3000:3000"
     environment:
