@@ -29,7 +29,7 @@ pipeline {
                 script {
                     // Build the task-frontend Docker image
                     dir('task-frontend') {
-                        sh 'docker build -t my-task-frontend .'
+                        sh 'docker build --no-cache -t my-task-frontend .'
                     }
                     // Build the task-backend Docker image
                     dir('task-backend') {
