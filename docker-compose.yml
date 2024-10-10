@@ -1,34 +1,64 @@
 version: '3'
+
 services:
-  mongo:
-    image: mongo
-    container_name: mongo
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=secret
-    volumes:
-      - mongo-data:/data/db
-
-  task-backend:
-    build: ./task-backend
-    container_name: task-backend
-    ports:
-      - "5000:5000"
-    environment:
-      - MONGO_URI=${MONGO_URI}  # Injecting MongoDB URI from Jenkins credentials
-      - JWT_SECRET=${JWT_SECRET}  # Injecting JWT secret from Jenkins credentials
-    depends_on:
-      - mongo
-
-  task-frontend:
-    build: ./task-frontend
-    container_name: task-frontend
+  frontend:
+    build: ./taskapp-frontend
+    container_name: taskapp-frontend
     ports:
       - "3000:3000"
+    environment:
+      - NODE_ENV=production
+  user-service:
+    build: ./task-backend/user-service
+    container_name: user-service
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
     depends_on:
-      - task-backend
+          - frontend  # This ensures frontend is built and up before user-service      
 
-volumes:
-  mongo-data:
+  task-service:
+    build: ./task-backend/task-service
+    container_name: task-service
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+      - PORT=3003
+    depends_on:
+          - frontend  # This ensures frontend is built and up before user-service
+
+  subtask-service:
+    build: ./task-backend/subtask-service
+    container_name: subtask-service
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - PORT=3002
+    depends_on:
+          - frontend  # This ensures frontend is built and up before user-service
+
+  search-service:
+    build: ./task-backend/search-service
+    container_name: search-service
+    ports:
+      - "3004:3004"
+    environment:
+      - NODE_ENV=production
+      - PORT=3004
+    depends_on:
+          - frontend  # This ensures frontend is built and up before user-service
+
+  task-visualization-service:
+    build: ./task-backend/task-visualization-service
+    container_name: task-visualization-service
+    ports:
+      - "3005:3005"
+    environment:
+      - NODE_ENV=production
+      - PORT=3005
+    depends_on:
+          - frontend  # This ensures frontend is built and up before user-service

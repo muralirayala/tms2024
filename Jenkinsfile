@@ -1,60 +1,47 @@
 pipeline {
     agent any
 
-    environment {
-        // Fetching sensitive credentials from Jenkins
-        JWT_SECRET = credentials('jwt-secret')
-        MONGO_URI = credentials('mongo-uri')
-    }
-
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                // Check out the repository from the 'develop' branch on GitHub
-                git branch: 'develop', url: 'https://github.com/muralirayala/tms2024.git'
+                // Assuming you're storing your project in a Git repository
+                git branch: 'main', url: 'https://github.com/muralirayala/tms2024.git'
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build and Start Services') {
             steps {
                 script {
-                    // Build the task-frontend Docker image
-                    dir('task-frontend') {
-                        sh 'docker build -t my-task-frontend .'
-                    }
-                    // Build the task-backend Docker image
-                    dir('task-backend') {
-                        sh 'docker build -t my-task-backend .'
-                    }
+                    // Use Docker Compose to build and start all services
+                    sh 'docker-compose up --build -d'
                 }
             }
         }
 
-        stage('Deploy with Docker Compose') {
+        stage('Test Services') {
             steps {
-                script {
-                    // Deploying both services using Docker Compose
-                    sh 'docker-compose -f docker-compose.yaml up -d --build'
-                }
+                // Test your services by making requests to them
+                sh 'curl http://localhost:3001' // Testing user-service
+                sh 'curl http://localhost:3002' // Testing subtask-service
+                sh 'curl http://localhost:3003' // Testing task-service
+                sh 'curl http://localhost:3004' // Testing search-service
+                sh 'curl http://localhost:3005' // Testing task-visualization-service
             }
         }
 
-        stage('Run Tests') {
+        stage('Stop Services') {
             steps {
                 script {
-                    // Optionally, you can run any tests for the backend
-                    sh 'docker-compose exec task-backend npm test'
+                    // Stop the services after testing
+                    sh 'docker-compose down'
                 }
             }
         }
     }
 
     post {
-        success {
-            echo 'Application deployed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed.'
+        always {
+            echo 'Pipeline execution completed'
         }
     }
 }
