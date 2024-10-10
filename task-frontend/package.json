@@ -14,10 +14,7 @@
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
-    "web-vitals": "^2.1.4",
-    "eslint": "^7.32.0",  
-    "eslint-config-react-app": "^6.0.0"  
-    
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "lint": "eslint .",
@@ -47,5 +44,10 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-react-app": "^7.0.1",
+    "eslint-plugin-testing-library": "^6.3.0"
+  }
 }
