@@ -14,12 +14,20 @@ pipeline {
                     // Stop and remove containers
                     bat 'docker-compose down'
                     
-                    // Build the frontend Docker image without cache
-                    bat 'docker build --no-cache -t task-frontend ./task-frontend' // Adjust the path if necessary
-
-                    // Build and start other services
+                    // Build and start services without cache
                     bat 'docker-compose build --no-cache'
                     bat 'docker-compose up -d'
+                }
+            }
+        }
+
+        stage('Debug Node Modules') {
+            steps {
+                script {
+                    // List node_modules directory
+                    bat 'dir task-frontend\\node_modules'
+                    // List react-scripts specifically
+                    bat 'dir task-frontend\\node_modules\\react-scripts'
                 }
             }
         }
