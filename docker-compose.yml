@@ -4,7 +4,7 @@ services:
       context: ./task-frontend  # Ensure the context is set to the correct path
     container_name: task-frontend
     ports:
-      - "3000:80"  # Map the host port 3000 to container port 80
+      - "3000:80"  # Exposing port 80 from Nginx
     environment:
       - NODE_ENV=production
       

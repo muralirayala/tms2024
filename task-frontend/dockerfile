@@ -4,26 +4,30 @@ FROM node:14-alpine as build-stage
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json (or yarn.lock)
+# Copy the package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies including dev dependencies
-RUN npm install --production=false
+# Install dependencies
+RUN npm install
 
 # Copy the rest of the React app code
 COPY . .
+
+# Debugging: List contents before building
+RUN ls -la
+RUN cat package.json
 
 # Build the React app
 RUN npm run build
 
 # Stage 2: Production Stage
-FROM nginx:alpine
+FROM nginx:alpine as production-stage
 
-# Copy the build output from the build stage
+# Copy the build output to the Nginx HTML folder
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
 
-# Start Nginx
+# Command to run Nginx
 CMD ["nginx", "-g", "daemon off;"]
