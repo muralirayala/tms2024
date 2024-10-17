@@ -4,14 +4,17 @@ FROM node:16-alpine AS build-stage
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json first
+# Copy the package.json and package-lock.json
 COPY package*.json ./
 
-# Install dependencies (including react-scripts)
+# Clean npm cache
+RUN npm cache clean --force
+
+# Install dependencies
 RUN npm install
 
-# Log the contents of node_modules to check for react-scripts
-RUN echo "Checking contents of node_modules..." && ls -la node_modules && npm list react-scripts
+# Debugging: List the installed modules
+RUN npm list --depth=0
 
 # Copy the rest of the React app code
 COPY . .
