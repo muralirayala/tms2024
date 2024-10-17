@@ -1,17 +1,14 @@
 # Stage 1: Build Stage
-FROM node:14-alpine as build-stage
+FROM node:16-alpine AS build-stage
 
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json
+# Copy the package.json and package-lock.json first to leverage Docker caching
 COPY package*.json ./
 
-# Clean npm cache
-RUN npm cache clean --force
-
 # Install dependencies
-RUN npm install
+RUN npm install --silent  # Using --silent to reduce log output
 
 # Debugging: Check if react-scripts is installed
 RUN npm list react-scripts
@@ -23,7 +20,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production Stage
-FROM nginx:alpine as production-stage
+FROM nginx:alpine AS production-stage
 
 # Copy the build output to the Nginx HTML folder
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
