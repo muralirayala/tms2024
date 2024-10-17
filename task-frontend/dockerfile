@@ -11,11 +11,16 @@ COPY package*.json ./
 # Clean npm cache
 RUN npm cache clean --force
 
+
+RUN npm install react-scripts
+
 # Install dependencies
 RUN npm ci 
 
+
 # Debugging: Check if react-scripts is installed
 RUN npm list react-scripts
+
 
 # Debugging: Check if react-scripts is installed and log full paths
 RUN echo "Current working directory is: $(pwd)" && \
@@ -24,11 +29,19 @@ RUN echo "Current working directory is: $(pwd)" && \
     echo "Checking full path for react-scripts:" && \
     realpath ./node_modules/.bin/react-scripts || readlink -f ./node_modules/.bin/react-scripts
 
+# Copy the local node_modules (not recommended for production)
+COPY node_modules ./node_modules
+
 # Copy the rest of the React app code
 COPY . .
 
+# Debugging: List the node_modules directory
+RUN echo "Listing contents of node_modules:" && ls -R ./node_modules
+
 # Build the React app
-RUN npm run build
+RUN ./node_modules/.bin/react-scripts build
+
+
 
 # Stage 2: Production Stage
 FROM nginx:alpine AS production-stage
