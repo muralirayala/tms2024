@@ -4,14 +4,14 @@ FROM node:16-alpine AS build-stage
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json first to leverage Docker caching
+# Copy package.json and package-lock.json first
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --silent  # Using --silent to reduce log output
+# Install dependencies (including react-scripts)
+RUN npm install
 
-# Debugging: Check if react-scripts is installed
-RUN npm list react-scripts
+# Log the contents of node_modules to check for react-scripts
+RUN echo "Checking contents of node_modules..." && ls -la node_modules && npm list react-scripts
 
 # Copy the rest of the React app code
 COPY . .
