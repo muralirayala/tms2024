@@ -7,15 +7,17 @@ WORKDIR /usr/src/app
 # Copy the package.json and package-lock.json
 COPY package*.json ./
 
+# Clean npm cache
+RUN npm cache clean --force
+
 # Install dependencies
 RUN npm install
 
+# Debugging: Check if react-scripts is installed
+RUN npm list react-scripts
+
 # Copy the rest of the React app code
 COPY . .
-
-# Debugging: List contents before building
-RUN ls -la
-RUN cat package.json
 
 # Build the React app
 RUN npm run build
