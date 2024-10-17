@@ -1,17 +1,21 @@
-#base image
+# Base Image
 FROM node:14
-WORKDIR D:\taskapp\task-backend\user-service
 
-#copy the app files
-COPY package.json* ./
+# Set working directory inside the container
+WORKDIR /usr/src/app
 
-COPY . .
+# Copy package.json and package-lock.json if available
+COPY package*.json ./
 
-#install dependencies
+# Install dependencies
 RUN npm install
 
-#Expose PORT
-EXPOSE 3001
+# Copy the remaining application files
+COPY . .
 
-#Start the app
+# Expose the port
+EXPOSE 3001  
+# (or whichever port the service uses)
+
+# Start the application
 CMD [ "node", "server.js" ]

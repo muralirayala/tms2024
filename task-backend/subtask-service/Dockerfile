@@ -1,6 +1,9 @@
 #base image
 FROM node:14
-WORKDIR D:\taskapp\task-backend\subtask-service
+
+# Set working directory inside the container
+WORKDIR /usr/src/app
+#WORKDIR D:\taskapp\task-backend\subtask-service
 
 #copy the app files
 COPY package.json* ./
