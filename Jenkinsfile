@@ -15,7 +15,7 @@ pipeline {
                     bat 'docker-compose down'
 
                     // Build the Docker image without cache
-                    bat 'docker build --no-cache -t task-frontend .'
+                    bat 'docker build --no-cache -t task-frontend ./frontend'
 
                     // Build and start services using docker-compose
                     bat 'docker-compose up -d'
