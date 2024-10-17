@@ -2,13 +2,10 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout Staging Branch') {
+        stage('Clone Repository') {
             steps {
-                // Ensure you are on the staging branch
-                script {
-                    // If Jenkins SCM is used, this step may be done automatically
-                    checkout scm: [$class: 'GitSCM', branches: [[name: 'staging']]]
-                }
+                // Repository is cloned automatically by Jenkins SCM
+                echo 'Repository is cloned automatically by Jenkins SCM'
             }
         }
 
