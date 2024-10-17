@@ -9,11 +9,29 @@ pipeline {
             }
         }
 
-        stage('Build and Start Services') {
+        stage('Stop and Remove Services') {
             steps {
                 script {
-                    // Use Docker Compose to build and start all services
-                    bat 'docker-compose up --build -d'
+                    // Stop and remove existing containers
+                    bat 'docker-compose down || exit 0' // Use || exit 0 to avoid failing if no containers are running
+                }
+            }
+        }
+
+        stage('Build Services') {
+            steps {
+                script {
+                    // Build the Docker images without cache
+                    bat 'docker-compose build --no-cache'
+                }
+            }
+        }
+
+        stage('Start Services') {
+            steps {
+                script {
+                    // Start the containers in detached mode
+                    bat 'docker-compose up -d'
                 }
             }
         }
