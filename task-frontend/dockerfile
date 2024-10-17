@@ -23,7 +23,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production Stage
-FROM nginx:alpine AS production-stage
+FROM nginx:alpine AS production-stage  # Correct casing for the alias
 
 # Copy the build output to the Nginx HTML folder
 COPY --from=build-stage /usr/src/app/build /usr/share/nginx/html
