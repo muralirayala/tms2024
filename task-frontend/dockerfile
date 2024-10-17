@@ -21,6 +21,10 @@ RUN npm list react-scripts
 COPY . .
 
 # Build the React app
+RUN ./node_modules/.bin/react-scripts build  # Explicit path to react-scripts
+
+
+# Build the React app
 RUN npm run build
 
 # Stage 2: Production Stage
