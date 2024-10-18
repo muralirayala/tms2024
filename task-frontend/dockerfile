@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm cache clean --force
 
 # Install dependencies
-RUN npm install 
+RUN npm install
 
 # Debugging: Check if react-scripts is installed
 RUN npm list react-scripts
@@ -19,11 +19,11 @@ RUN npm list react-scripts
 # Copy the rest of the React app code
 COPY . .
 
-ENV CI=false
+# Set the CI environment variable to an empty string to avoid treating warnings as errors
+ENV CI=''
 
 # Build the React app
 RUN npm run build
-
 
 # Stage 2: Production Stage
 FROM nginx:alpine AS production-stage
