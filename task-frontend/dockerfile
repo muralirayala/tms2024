@@ -19,9 +19,11 @@ RUN npm list react-scripts
 # Copy the rest of the React app code
 COPY . .
 
+ENV CI=false
 
 # Build the React app
 RUN npm run build
+
 
 # Stage 2: Production Stage
 FROM nginx:alpine AS production-stage
