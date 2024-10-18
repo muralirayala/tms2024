@@ -7,7 +7,7 @@ services:
       - "3000:80"  # Exposing port 80 from Nginx
     environment:
       - NODE_ENV=production
-      
+
   user-service:
     build:
       context: ./task-backend/user-service
