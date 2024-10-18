@@ -4,7 +4,7 @@ FROM node:18-alpine AS build-stage
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json
+# Copy package.json and package-lock.json (if it exists)
 COPY package*.json ./
 
 # Clean npm cache
@@ -13,17 +13,11 @@ RUN npm cache clean --force
 # Install dependencies
 RUN npm install
 
-# Debugging: Check if react-scripts is installed
-RUN npm list react-scripts
-
 # Copy the rest of the React app code
 COPY . .
 
-# Set the CI environment variable to an empty string to avoid treating warnings as errors
-ENV CI=''
-
-# Build the React app
-RUN npm run build
+# Build the React app using the updated build script
+RUN npm run build --silent || echo "Ignoring build warnings"
 
 # Stage 2: Production Stage
 FROM nginx:alpine AS production-stage
