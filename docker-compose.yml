@@ -1,69 +1,112 @@
 services:
   frontend:
     build:
-      context: ./task-frontend  # Ensure the context is set to the correct path
+      context: ./
+      dockerfile: Dockerfile  # Use a single Dockerfile for all services
+      args:
+        - SERVICE_NAME=task-frontend  # Pass the service name dynamically
+        - PORT=3000
     container_name: task-frontend
-    ports:
-      - "3000:80"  # Exposing port 80 from Nginx
     environment:
       - NODE_ENV=production
+      - SERVICE_NAME=task-frontend  # Pass the service name dynamically
+      - PORT=3000
 
   user-service:
     build:
-      context: ./task-backend/user-service
+      context: ./
+      dockerfile: Dockerfile  # Use a single Dockerfile for all services
+      args:
+        - SERVICE_NAME=user-service  # Pass the service name dynamically
+        - PORT=3001                  # Specify the port for the service
     container_name: user-service
     ports:
       - "3001:3001"
     environment:
       - NODE_ENV=production
       - PORT=3001
+      - SERVICE_NAME=user-service
+      - MONGODB_URI=mongodb://host.docker.internal:27017/taskapp  # Updated MongoDB URI
     depends_on:
       - frontend
 
   task-service:
     build:
-      context: ./task-backend/task-service
+      context: ./
+      dockerfile: Dockerfile  # Use the same Dockerfile
+      args:
+        - SERVICE_NAME=task-service
+        - PORT=3003
     container_name: task-service
     ports:
       - "3003:3003"
     environment:
       - NODE_ENV=production
       - PORT=3003
+      - SERVICE_NAME=task-service
+      - MONGODB_URI=mongodb://host.docker.internal:27017/taskapp  # Updated MongoDB URI
     depends_on:
       - frontend
+      - user-service
 
   subtask-service:
     build:
-      context: ./task-backend/subtask-service
+      context: ./
+      dockerfile: Dockerfile  # Use the same Dockerfile
+      args:
+        - SERVICE_NAME=subtask-service
+        - PORT=3002
     container_name: subtask-service
     ports:
       - "3002:3002"
     environment:
       - NODE_ENV=production
       - PORT=3002
+      - SERVICE_NAME=subtask-service
+      - MONGODB_URI=mongodb://host.docker.internal:27017/taskapp  # Updated MongoDB URI
     depends_on:
       - frontend
+      - user-service
+      - task-service
 
   search-service:
     build:
-      context: ./task-backend/search-service
+      context: ./
+      dockerfile: Dockerfile  # Use the same Dockerfile
+      args:
+        - SERVICE_NAME=search-service
+        - PORT=3004
     container_name: search-service
     ports:
       - "3004:3004"
     environment:
       - NODE_ENV=production
       - PORT=3004
+      - SERVICE_NAME=search-service
+      - MONGODB_URI=mongodb://host.docker.internal:27017/taskapp  # Updated MongoDB URI
     depends_on:
       - frontend
+      - user-service
+      - task-service
+      - subtask-service
 
   task-visualization-service:
     build:
-      context: ./task-backend/task-visualization-service
+      context: ./
+      dockerfile: Dockerfile  # Use the same Dockerfile
+      args:
+        - SERVICE_NAME=task-visualization-service
+        - PORT=3005
     container_name: task-visualization-service
     ports:
       - "3005:3005"
     environment:
       - NODE_ENV=production
       - PORT=3005
+      - SERVICE_NAME=task-visualization-service
+      - MONGODB_URI=mongodb://host.docker.internal:27017/taskapp  # Updated MongoDB URI
     depends_on:
       - frontend
+      - user-service
+      - task-service
+      - subtask-service
